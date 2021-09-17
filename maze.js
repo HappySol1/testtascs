@@ -1,5 +1,5 @@
 let maze = [
-    [1, 1, 1, 0, 0, 1],
+    [0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 0, 1],
     [0, 0, 0, 0, 0, 0],
     [0, 1, 1, 1, 1, 1],
@@ -7,16 +7,28 @@ let maze = [
     [1, 1, 1, 1, 1, 0]
 ];
 
+
 function checkPath(start,end){
     maze[start.y][start.x] = 5
-    // while(true){
-
-    // }
-    // const found = maze.find(element => element > 10)
-    // console.log(found)
 
     let siblings = getValidSib(start)
-    console.log(siblings)
+    if(siblings.length > 0){
+        for (let i = 0; i < siblings.length; i++) {
+            let current = siblings[i]
+
+            // if(current.x === end.x && current.y === end.y)
+            //     return true
+            const isSolved = current.x === end.x && current.y === end.y;
+            const notVisited = maze[current.y][current.x] !== 5;
+
+            if (isSolved || checkPath(current, end)) { // черная магия
+                maze[current.y][current.x] = 6
+                return true;
+            }
+        }
+    }
+    return false
+
     function getValidSib(cord){
         let {x, y} = cord
         let cords = []
@@ -39,3 +51,4 @@ function checkPath(start,end){
 
 
 console.log(checkPath({ x: 3, y: 0 }, { x: 5, y: 5 }));
+console.log(maze)
